@@ -8,7 +8,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-/** Seeds demo users on first start (idempotent - safe across restarts). */
 @Component
 public class DataInitializer implements ApplicationRunner {
 

@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-/** Loads users from the database (so users survive application restarts). */
 @Service
 public class DbUserDetailsService implements UserDetailsService {
 

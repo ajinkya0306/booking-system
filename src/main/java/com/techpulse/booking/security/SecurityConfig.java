@@ -11,10 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-/**
- * Stateless HTTP Basic authentication with role based authorization.
- * Every endpoint requires authentication; role rules are listed explicitly.
- */
 @Configuration
 public class SecurityConfig {
 

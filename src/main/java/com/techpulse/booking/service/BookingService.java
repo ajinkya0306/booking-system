@@ -16,17 +16,7 @@ import com.techpulse.booking.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Core business logic.
- *
- * Transaction boundary: every public method is ONE database transaction. The slot row is
- * locked (SELECT ... FOR UPDATE) before anything is checked or changed, so the
- * "check slot status, update slot, insert booking" sequence is atomic with respect to every
- * other request. Any exception rolls the whole transaction back -> no partial updates.
- *
- * Lock ordering: both book and cancel always lock the SLOT row first, so two transactions
- * can never wait on each other in a cycle (no deadlocks).
- */
+
 @Service
 public class BookingService {
 
@@ -47,41 +37,35 @@ public class BookingService {
         AppUser user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found: " + username));
 
-        // 1. Acquire the row lock. Concurrent requests for the same slot queue up here.
         Slot slot = slotRepository.findByIdForUpdate(slotId)
                 .orElseThrow(() -> new ResourceNotFoundException("Slot not found: " + slotId));
 
-        // 2. We now hold the lock and see the latest committed state.
         if (slot.getStatus() != SlotStatus.AVAILABLE) {
             throw new SlotAlreadyBookedException(slotId);
         }
 
-        // 3. Update slot + insert booking in the same transaction (atomic).
         slot.setStatus(SlotStatus.BOOKED);
         Booking booking = bookingRepository.save(new Booking(slot, user));
 
         return BookingResponse.from(booking);
     }
 
-    /** A user cancelling their own booking. */
     @Transactional
     public BookingResponse cancelOwnBooking(Long bookingId, String username) {
         return cancel(bookingId, username, false);
     }
 
-    /** An admin cancelling any booking. */
     @Transactional
     public BookingResponse cancelAnyBooking(Long bookingId, String adminUsername) {
         return cancel(bookingId, adminUsername, true);
     }
 
     private BookingResponse cancel(Long bookingId, String requester, boolean isAdmin) {
-        // Find the slot id WITHOUT loading the Booking entity, so that the booking is read
-        // fresh (after the lock is held) and never from a stale persistence-context copy.
+
         Long slotId = bookingRepository.findSlotIdByBookingId(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found: " + bookingId));
 
-        // Same lock order as bookSlot: slot first.
+       
         Slot slot = slotRepository.findByIdForUpdate(slotId)
                 .orElseThrow(() -> new ResourceNotFoundException("Slot not found: " + slotId));
 

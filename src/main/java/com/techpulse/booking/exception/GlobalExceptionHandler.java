@@ -18,11 +18,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 import java.time.Instant;
 import java.util.stream.Collectors;
 
-/**
- * Converts exceptions into clear, consistent JSON error responses.
- * Concurrency conflicts (lost lock race, lock timeout, unique-constraint hit) are mapped to
- * HTTP 409 so clients always get a meaningful answer instead of a 500.
- */
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

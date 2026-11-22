@@ -18,7 +18,7 @@ public class AdminBookingController {
         this.bookingService = bookingService;
     }
 
-    /** ADMIN only - cancels any booking. */
+   
     @PostMapping("/{id}/cancel")
     public BookingResponse cancel(@PathVariable("id") Long id, Authentication authentication) {
         return bookingService.cancelAnyBooking(id, authentication.getName());

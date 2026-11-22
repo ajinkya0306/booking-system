@@ -24,14 +24,13 @@ public class SlotController {
         this.slotService = slotService;
     }
 
-    /** ADMIN only (enforced in SecurityConfig). */
+    
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public SlotResponse createSlot(@Valid @RequestBody CreateSlotRequest request) {
         return slotService.createSlot(request);
     }
 
-    /** USER and ADMIN. */
     @GetMapping
     public List<SlotResponse> listSlots() {
         return slotService.listSlots();

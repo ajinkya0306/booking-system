@@ -10,11 +10,7 @@ import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    /**
-     * Returns only the slot id of a booking (scalar projection, the Booking entity is NOT
-     * loaded into the persistence context). This lets the cancel flow lock the slot first
-     * and only then load a fresh copy of the booking.
-     */
+    
     @Query("select b.slot.id from Booking b where b.id = :bookingId")
     Optional<Long> findSlotIdByBookingId(@Param("bookingId") Long bookingId);
 

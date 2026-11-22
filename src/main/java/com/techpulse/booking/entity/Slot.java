@@ -30,11 +30,7 @@ public class Slot {
     @Column(nullable = false, length = 20)
     private SlotStatus status = SlotStatus.AVAILABLE;
 
-    /**
-     * Optimistic-locking safety net. The primary protection is the pessimistic row lock
-     * taken in {@code SlotRepository#findByIdForUpdate}; the version column guarantees that
-     * even a stale write can never silently overwrite a newer slot state.
-     */
+    
     @Version
     private long version;
 

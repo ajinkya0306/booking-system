@@ -23,14 +23,14 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    /** USER only. */
+   
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookingResponse book(@Valid @RequestBody BookingRequest request, Authentication authentication) {
         return bookingService.bookSlot(request.slotId(), authentication.getName());
     }
 
-    /** USER only - cancels the caller's own booking. */
+    
     @PostMapping("/{id}/cancel")
     public BookingResponse cancel(@PathVariable("id") Long id, Authentication authentication) {
         return bookingService.cancelOwnBooking(id, authentication.getName());

@@ -37,13 +37,7 @@ public class Booking {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    /**
-     * Database-level guarantee of "only one ACTIVE booking per slot".
-     * Holds the slot id while the booking is ACTIVE and NULL once it is CANCELLED.
-     * The UNIQUE constraint means that even if application logic were bypassed, the
-     * database itself would reject a second active booking for the same slot
-     * (NULLs are not considered equal, so any number of cancelled bookings is fine).
-     */
+    
     @Column(name = "active_slot_id", unique = true)
     private Long activeSlotId;
 
